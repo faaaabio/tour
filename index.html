@@ -6,8 +6,10 @@
     <title>GanjaTour em João Pessoa/PB</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -19,6 +21,19 @@
             }
         }
     </script>
+    <style>
+        .smoke-text {
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(20px);
+            will-change: transform, opacity, filter;
+        }
+
+        section {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
 </head>
 <body class="bg-gray-100">
     <!-- Navbar Fixa com Ícones -->
@@ -42,40 +57,90 @@
         <!-- Seção 1 -->
         <section class="min-h-screen w-full p-16 bg-white flex items-center justify-center">
             <div class="text-center">
-                <h2 class="text-7xl mb-8">GanjaTour</h2>
-                <p class="text-gray-600 font-light text-lg">O primeiro tour cannabico de João Pessoa</p>
+                <h2 class="text-7xl mb-8 font-black smoke-text">GanjaTour</h2>
+                <p class="text-gray-600 font-light text-lg smoke-text">O primeiro tour cannabico de João Pessoa</p>
             </div>
         </section>
 
         <!-- Seção 2 -->
         <section class="min-h-screen w-full p-16 bg-gray-50">
-            <h2 class="text-5xl mb-8">Próximas Datas</h2>
-            <p class="text-gray-600 font-light text-lg">Escolha entre as 7 próximas datas disponíveis para seu tour</p>
+            <h2 class="text-5xl mb-8 font-black smoke-text">Próximas Datas</h2>
+            <p class="text-gray-600 font-light text-lg smoke-text">Escolha entre as 7 próximas datas disponíveis para seu tour</p>
         </section>
 
         <!-- Seção 3 -->
         <section class="min-h-screen w-full p-16 bg-white">
-            <h2 class="text-5xl mb-8">Pacote Completo</h2>
-            <p class="text-gray-600 font-light text-lg">Inclui bebidas artesanais, comidas especiais e kit exclusivo GT</p>
+            <h2 class="text-5xl mb-8 font-black smoke-text">Pacote Completo</h2>
+            <p class="text-gray-600 font-light text-lg smoke-text">Inclui bebidas artesanais, comidas especiais e kit exclusivo GT</p>
         </section>
 
         <!-- Seção 4 -->
         <section class="min-h-screen w-full p-16 bg-gray-50">
-            <h2 class="text-5xl mb-8">Roteiro</h2>
-            <p class="text-gray-600 font-light text-lg">Conheça os melhores pontos cannabicos de João Pessoa</p>
+            <h2 class="text-5xl mb-8 font-black smoke-text">Roteiro</h2>
+            <p class="text-gray-600 font-light text-lg smoke-text">Conheça os melhores pontos cannabicos de João Pessoa</p>
         </section>
 
         <!-- Seção 5 -->
         <section class="min-h-screen w-full p-16 bg-white">
-            <h2 class="text-5xl mb-8">Kit GT</h2>
-            <p class="text-gray-600 font-light text-lg">Receba um kit exclusivo com produtos selecionados</p>
+            <h2 class="text-5xl mb-8 font-black smoke-text">Kit GT</h2>
+            <p class="text-gray-600 font-light text-lg smoke-text">Receba um kit exclusivo com produtos selecionados</p>
         </section>
 
         <!-- Seção 6 -->
         <section class="min-h-screen w-full p-16 bg-gray-50">
-            <h2 class="text-5xl mb-8">Reserve Agora</h2>
-            <p class="text-gray-600 font-light text-lg">Garanta sua vaga no próximo GanjaTour</p>
+            <h2 class="text-5xl mb-8 font-black smoke-text">Reserve Agora</h2>
+            <p class="text-gray-600 font-light text-lg smoke-text">Garanta sua vaga no próximo GanjaTour</p>
         </section>
     </main>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Função para animar os textos
+        function animateTexts(texts) {
+            return gsap.to(texts, {
+                opacity: 1,
+                filter: "blur(0px)",
+                y: 0,
+                duration: 1,
+                stagger: 0.15,
+                ease: "power2.out"
+            });
+        }
+
+        // Animação da primeira seção
+        const firstSection = document.querySelector("section:first-child");
+        const firstSectionTexts = firstSection.querySelectorAll('.smoke-text');
+        
+        // Animação inicial com delay para garantir que todos os elementos sejam animados
+        gsap.to(firstSectionTexts, {
+            opacity: 1,
+            filter: "blur(0px)",
+            y: 0,
+            duration: 1.5,
+            stagger: 0.2,
+            ease: "power2.out",
+            delay: 0.3
+        });
+
+        // Animação das demais seções
+        const sections = document.querySelectorAll('section:not(:first-child)');
+        
+        sections.forEach(section => {
+            const texts = section.querySelectorAll('.smoke-text');
+            
+            ScrollTrigger.create({
+                trigger: section,
+                start: "top 80%",
+                onEnter: () => {
+                    animateTexts(texts);
+                },
+                once: true
+            });
+        });
+
+        // Forçar atualização do ScrollTrigger
+        ScrollTrigger.refresh();
+    </script>
 </body>
 </html>
