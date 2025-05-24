@@ -379,8 +379,8 @@
     </div>
 
     <!-- Popup de Pagamento -->
-    <div id="paymentPopup" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center sm:items-end justify-center z-50">
-        <div class="bg-white w-full sm:w-auto sm:max-w-2xl rounded-t-2xl sm:rounded-2xl p-6 transform transition-transform duration-300 translate-y-full sm:translate-y-0 sm:scale-95">
+    <div id="paymentPopup" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white w-full sm:w-auto sm:max-w-2xl rounded-2xl p-6 transform transition-transform duration-300 scale-95">
             <div class="flex justify-between items-center mb-4">
                 <h3 class="text-lg font-semibold text-gray-800">Pagamento via PIX</h3>
                 <button id="closePopup" class="text-gray-500 hover:text-gray-700">
@@ -390,7 +390,7 @@
                 </button>
             </div>
             <div class="text-center">
-                <img src="qrcode-pix.png" alt="QR Code PIX" class="mx-auto mb-4 w-48 h-48 sm:w-64 sm:h-64">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000" alt="QR Code PIX" class="mx-auto mb-4 w-48 h-48 sm:w-64 sm:h-64">
                 <p class="text-sm text-gray-600 mb-2">Ou copie o código PIX abaixo:</p>
                 <div class="bg-gray-100 p-3 rounded-lg mb-4">
                     <p id="pixCode" class="text-sm font-mono break-all">00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000</p>
@@ -432,20 +432,12 @@
             paymentPopup.classList.remove('hidden');
             paymentPopup.classList.add('flex');
             setTimeout(() => {
-                if (window.innerWidth >= 640) { // sm breakpoint
-                    popupContent.classList.remove('scale-95');
-                } else {
-                    popupContent.classList.remove('translate-y-full');
-                }
+                popupContent.classList.remove('scale-95');
             }, 10);
         });
 
         closePopup.addEventListener('click', () => {
-            if (window.innerWidth >= 640) { // sm breakpoint
-                popupContent.classList.add('scale-95');
-            } else {
-                popupContent.classList.add('translate-y-full');
-            }
+            popupContent.classList.add('scale-95');
             setTimeout(() => {
                 paymentPopup.classList.add('hidden');
                 paymentPopup.classList.remove('flex');
@@ -465,19 +457,6 @@
         paymentPopup.addEventListener('click', (e) => {
             if (e.target === paymentPopup) {
                 closePopup.click();
-            }
-        });
-
-        // Ajustar animação ao redimensionar a janela
-        window.addEventListener('resize', () => {
-            if (paymentPopup.classList.contains('flex')) {
-                if (window.innerWidth >= 640) { // sm breakpoint
-                    popupContent.classList.remove('translate-y-full');
-                    popupContent.classList.remove('scale-95');
-                } else {
-                    popupContent.classList.remove('scale-95');
-                    popupContent.classList.remove('translate-y-full');
-                }
             }
         });
 
