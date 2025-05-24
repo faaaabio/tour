@@ -188,11 +188,13 @@
                         <div class="bento-card rounded-xl p-4 sm:p-8 shadow-lg">
                             <!-- Logo da Marca -->
                             <div class="mb-4 sm:mb-8">
-                                <div class="bg-emerald-50 p-2 sm:p-3 rounded-full inline-block">
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 sm:w-8 sm:h-8 text-emerald-600">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
-                                    </svg>
-                                </div>
+                                <a href="index.html" class="hover:opacity-80 transition-opacity">
+                                    <div class="p-2 sm:p-3 rounded-full inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 sm:w-8 sm:h-8 text-gray-800">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="m6.115 5.19.319 1.913A6 6 0 0 0 8.11 10.36L9.75 12l-.387.775c-.217.433-.132.956.21 1.298l1.348 1.348c.21.21.329.497.329.795v1.089c0 .426.24.815.622 1.006l.153.076c.433.217.956.132 1.298-.21l.723-.723a8.7 8.7 0 0 0 2.288-4.042 1.087 1.087 0 0 0-.358-1.099l-1.33-1.108c-.251-.21-.582-.299-.905-.245l-1.17.195a1.125 1.125 0 0 1-.98-.314l-.295-.295a1.125 1.125 0 0 1 0-1.591l.13-.132a1.125 1.125 0 0 1 1.3-.21l.603.302a.809.809 0 0 0 1.086-1.086L14.25 7.5l1.256-.837a4.5 4.5 0 0 0 1.528-1.732l.146-.292M6.115 5.19A9 9 0 1 0 17.18 4.64M6.115 5.19A8.965 8.965 0 0 1 12 3c1.929 0 3.716.607 5.18 1.64" />
+                                        </svg>
+                                    </div>
+                                </a>
                             </div>
 
                             <!-- Seleção de Data -->
@@ -366,12 +368,36 @@
                                 <span>Total</span>
                                 <span id="total-value">R$ 0,00</span>
                             </div>
-                            <button class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 sm:py-4 px-6 rounded-lg transition-colors duration-300 shadow-sm">
-                                Finalizar Compra
+                            <button id="reserveButton" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 sm:py-4 px-6 rounded-lg transition-colors duration-300 shadow-sm">
+                                Reservar Agora
                             </button>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup de Pagamento -->
+    <div id="paymentPopup" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center sm:items-end justify-center z-50">
+        <div class="bg-white w-full sm:w-auto sm:max-w-2xl rounded-t-2xl sm:rounded-2xl p-6 transform transition-transform duration-300 translate-y-full sm:translate-y-0 sm:scale-95">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Pagamento via PIX</h3>
+                <button id="closePopup" class="text-gray-500 hover:text-gray-700">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="text-center">
+                <img src="qrcode-pix.png" alt="QR Code PIX" class="mx-auto mb-4 w-48 h-48 sm:w-64 sm:h-64">
+                <p class="text-sm text-gray-600 mb-2">Ou copie o código PIX abaixo:</p>
+                <div class="bg-gray-100 p-3 rounded-lg mb-4">
+                    <p id="pixCode" class="text-sm font-mono break-all">00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000</p>
+                </div>
+                <button id="copyPixCode" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
+                    Copiar Código PIX
+                </button>
             </div>
         </div>
     </div>
@@ -393,6 +419,67 @@
             'snack-completo': { price: 89.90, name: 'Snack Completo' },
             'snack-premium': { price: 119.90, name: 'Snack Premium' }
         };
+
+        // Funções do popup de pagamento
+        const paymentPopup = document.getElementById('paymentPopup');
+        const closePopup = document.getElementById('closePopup');
+        const reserveButton = document.getElementById('reserveButton');
+        const copyPixCode = document.getElementById('copyPixCode');
+        const pixCode = document.getElementById('pixCode');
+        const popupContent = paymentPopup.querySelector('.bg-white');
+
+        reserveButton.addEventListener('click', () => {
+            paymentPopup.classList.remove('hidden');
+            paymentPopup.classList.add('flex');
+            setTimeout(() => {
+                if (window.innerWidth >= 640) { // sm breakpoint
+                    popupContent.classList.remove('scale-95');
+                } else {
+                    popupContent.classList.remove('translate-y-full');
+                }
+            }, 10);
+        });
+
+        closePopup.addEventListener('click', () => {
+            if (window.innerWidth >= 640) { // sm breakpoint
+                popupContent.classList.add('scale-95');
+            } else {
+                popupContent.classList.add('translate-y-full');
+            }
+            setTimeout(() => {
+                paymentPopup.classList.add('hidden');
+                paymentPopup.classList.remove('flex');
+            }, 300);
+        });
+
+        copyPixCode.addEventListener('click', () => {
+            navigator.clipboard.writeText(pixCode.textContent).then(() => {
+                copyPixCode.textContent = 'Código Copiado!';
+                setTimeout(() => {
+                    copyPixCode.textContent = 'Copiar Código PIX';
+                }, 2000);
+            });
+        });
+
+        // Fechar popup ao clicar fora
+        paymentPopup.addEventListener('click', (e) => {
+            if (e.target === paymentPopup) {
+                closePopup.click();
+            }
+        });
+
+        // Ajustar animação ao redimensionar a janela
+        window.addEventListener('resize', () => {
+            if (paymentPopup.classList.contains('flex')) {
+                if (window.innerWidth >= 640) { // sm breakpoint
+                    popupContent.classList.remove('translate-y-full');
+                    popupContent.classList.remove('scale-95');
+                } else {
+                    popupContent.classList.remove('scale-95');
+                    popupContent.classList.remove('translate-y-full');
+                }
+            }
+        });
 
         function formatDate(dateStr) {
             const date = new Date(dateStr);
