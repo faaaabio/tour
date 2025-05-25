@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controle de Vídeo com GSAP</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: #000;
+        }
+        #vimeoPlayer {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+        .scroll-container {
+            height: 3000px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="vimeoPlayer"></div>
+    <div class="scroll-container"></div>
+
+    <!-- GSAP e Player Vimeo -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+
+    <script>
+        // Registrar o plugin ScrollTrigger
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Inicializar o player do Vimeo
+        const player = new Vimeo.Player('vimeoPlayer', {
+            id: 1067047118,
+            width: '100%',
+            height: '100%',
+            muted: true,
+            background: true,
+            responsive: true,
+            dnt: true,
+            playsinline: true
+        });
+
+        let videoDuration = 0;
+        let isFirstScroll = true;
+        let isPlaying = false;
+
+        // Aguardar o vídeo estar pronto
+        player.ready().then(() => {
+            // Obter a duração do vídeo
+            player.getDuration().then((duration) => {
+                videoDuration = duration;
+                
+                // Configurar o ScrollTrigger
+                ScrollTrigger.create({
+                    trigger: ".scroll-container",
+                    start: "top top",
+                    end: "bottom bottom",
+                    scrub: 1,
+                    onUpdate: (self) => {
+                        if (isFirstScroll) {
+                            player.play();
+                            isFirstScroll = false;
+                            isPlaying = true;
+                        }
+
+                        if (isPlaying) {
+                            const videoTime = videoDuration * self.progress;
+                            player.setCurrentTime(videoTime).catch(error => {
+                                console.log('Erro ao atualizar o tempo:', error);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+
+        // Garantir que o vídeo começa pausado
+        player.setVolume(0);
+        player.pause();
+
+        // Adicionar listener para erros do player
+        player.on('error', function(error) {
+            console.log('Erro no player:', error);
+        });
+    </script>
+</body>
+</html>
