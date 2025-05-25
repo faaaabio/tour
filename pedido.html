@@ -273,23 +273,47 @@
                         <div class="space-y-3 sm:space-y-6 summary-content">
                             <!-- Datas Selecionadas -->
                             <div id="selected-dates" class="space-y-2 sm:space-y-3">
-                                <div class="flex justify-between text-gray-500">
+                                <div class="flex justify-between text-gray-500 cursor-pointer" onclick="toggleSection('dates-content')">
                                     <span>Datas Selecionadas</span>
-                                    <span id="dates-count">0 dias</span>
+                                    <div class="flex items-center">
+                                        <span id="dates-count">0 dias</span>
+                                        <svg id="dates-arrow" class="w-4 h-4 ml-2 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div id="dates-content" class="hidden sm:block">
+                                    <!-- Conteúdo das datas será inserido aqui via JavaScript -->
                                 </div>
                             </div>
                             <!-- Bebidas Selecionadas -->
                             <div id="selected-drinks" class="space-y-2 sm:space-y-3 hidden">
-                                <div class="flex justify-between text-gray-500">
-                                    <span id="drink-name"></span>
-                                    <span id="drink-price">R$ 0,00</span>
+                                <div class="flex justify-between text-gray-500 cursor-pointer" onclick="toggleSection('drinks-content')">
+                                    <span>Pacote de Bebidas</span>
+                                    <svg id="drinks-arrow" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <div id="drinks-content" class="hidden sm:block">
+                                    <div class="flex justify-between text-gray-500">
+                                        <span id="drink-name"></span>
+                                        <span id="drink-price">R$ 0,00</span>
+                                    </div>
                                 </div>
                             </div>
                             <!-- Comidas Selecionadas -->
                             <div id="selected-snacks" class="space-y-2 sm:space-y-3 hidden">
-                                <div class="flex justify-between text-gray-500">
-                                    <span id="snack-name"></span>
-                                    <span id="snack-price">R$ 0,00</span>
+                                <div class="flex justify-between text-gray-500 cursor-pointer" onclick="toggleSection('snacks-content')">
+                                    <span>Pacote de Comidas</span>
+                                    <svg id="snacks-arrow" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <div id="snacks-content" class="hidden sm:block">
+                                    <div class="flex justify-between text-gray-500">
+                                        <span id="snack-name"></span>
+                                        <span id="snack-price">R$ 0,00</span>
+                                    </div>
                                 </div>
                             </div>
                             <div id="discount-container" class="hidden">

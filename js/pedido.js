@@ -155,7 +155,36 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Função para alternar a visibilidade das seções
+    window.toggleSection = function(sectionId) {
+        const content = document.getElementById(sectionId);
+        const arrow = document.getElementById(sectionId.replace('content', 'arrow'));
+        
+        if (content.classList.contains('hidden')) {
+            content.classList.remove('hidden');
+            arrow.classList.add('rotate-180');
+        } else {
+            content.classList.add('hidden');
+            arrow.classList.remove('rotate-180');
+        }
+    };
+
+    // Atualiza as datas selecionadas
+    function updateSelectedDates() {
+        const datesContent = document.getElementById('dates-content');
+        datesContent.innerHTML = selectedDates.map(date => {
+            const dateObj = new Date(date);
+            const day = dateObj.getDate();
+            const month = dateObj.toLocaleString('pt-BR', { month: 'short' });
+            return `<div class="flex justify-between text-gray-500">
+                <span>${day} ${month}</span>
+                <span>${formatCurrency(PRICE_PER_DAY)}</span>
+            </div>`;
+        }).join('');
+    }
+
     // Atualiza a interface inicial
+    updateSelectedDates();
     updateSelectedItems();
 });
 
@@ -191,7 +220,9 @@ function sendToWhatsApp() {
 
     // Formata as datas para exibição
     const formattedDates = selectedDates.map(date => {
-        const [weekday, day, month] = date.split(' ');
+        const dateObj = new Date(date);
+        const day = dateObj.getDate();
+        const month = dateObj.toLocaleString('pt-BR', { month: 'short' });
         return `${day} ${month}`;
     }).join('\n');
 
