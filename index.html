@@ -171,11 +171,34 @@
             position: relative;
             z-index: 1;
         }
+
+        /* Adicionando media queries para responsividade */
+        @media (max-width: 768px) {
+            .hero-section, .dates-section, .package-section, 
+            .route-section, .kit-section, .reserve-section {
+                padding: 2rem 1rem;
+            }
+
+            h2 {
+                font-size: 2.5rem !important;
+            }
+
+            p {
+                font-size: 1rem !important;
+            }
+        }
+
+        /* Ajustando a navbar para mobile */
+        @media (max-width: 768px) {
+            nav {
+                padding: 1rem;
+            }
+        }
     </style>
 </head>
 <body class="bg-gray-100">
     <!-- Navbar Fixa com Ícones -->
-    <nav class="fixed bottom-0 left-0 w-full bg-transparent p-4 z-50 flex justify-between">
+    <nav class="fixed bottom-0 left-0 w-full bg-black/50 backdrop-blur-sm p-6 z-50 flex justify-between">
         <!-- Ícone 1 - Esquerda -->
         <a href="#" class="hover:opacity-80 transition-opacity">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8 text-emerald-300 hover:text-emerald-200 transition-colors">
@@ -193,50 +216,50 @@
     <!-- Conteúdo Principal -->
     <main>
         <!-- Seção 1 -->
-        <section class="min-h-screen w-full p-16 hero-section flex items-center">
+        <section class="min-h-screen w-full p-8 md:p-16 hero-section flex items-center">
             <div class="hero-content">
-                <h2 class="text-7xl mb-8 font-black smoke-text text-white">GanjaTour</h2>
-                <p class="text-gray-200 font-light text-lg smoke-text">O primeiro tour cannabico de João Pessoa</p>
+                <h2 class="text-5xl md:text-7xl mb-6 md:mb-8 font-black smoke-text text-white">GanjaTour</h2>
+                <p class="text-gray-200 font-light text-base md:text-lg smoke-text">O primeiro tour cannabico de João Pessoa</p>
             </div>
         </section>
 
         <!-- Seção 2 -->
-        <section class="min-h-screen w-full p-16 dates-section">
+        <section class="min-h-screen w-full p-8 md:p-16 dates-section">
             <div class="dates-content">
-                <h2 class="text-5xl mb-8 font-black smoke-text text-white">Próximas Datas</h2>
-                <p class="text-gray-200 font-light text-lg smoke-text">Escolha entre as 7 próximas datas disponíveis para seu tour</p>
+                <h2 class="text-4xl md:text-5xl mb-6 md:mb-8 font-black smoke-text text-white">Próximas Datas</h2>
+                <p class="text-gray-200 font-light text-base md:text-lg smoke-text">Escolha entre as 7 próximas datas disponíveis para seu tour</p>
             </div>
         </section>
 
         <!-- Seção 3 -->
-        <section class="min-h-screen w-full p-16 bg-white">
+        <section class="min-h-screen w-full p-8 md:p-16 bg-white">
             <div>
-                <h2 class="text-5xl mb-8 font-black smoke-text text-gray-800">Pacote Completo</h2>
-                <p class="text-gray-600 font-light text-lg smoke-text">Inclui bebidas artesanais, comidas especiais e kit exclusivo GT</p>
+                <h2 class="text-4xl md:text-5xl mb-6 md:mb-8 font-black smoke-text text-gray-800">Pacote Completo</h2>
+                <p class="text-gray-600 font-light text-base md:text-lg smoke-text">Inclui bebidas artesanais, comidas especiais e kit exclusivo GT</p>
             </div>
         </section>
 
         <!-- Seção 4 -->
-        <section class="min-h-screen w-full p-16 route-section">
+        <section class="min-h-screen w-full p-8 md:p-16 route-section">
             <div class="route-content">
-                <h2 class="text-5xl mb-8 font-black smoke-text text-white">Roteiro</h2>
-                <p class="text-gray-200 font-light text-lg smoke-text">Conheça os melhores pontos cannabicos de João Pessoa</p>
+                <h2 class="text-4xl md:text-5xl mb-6 md:mb-8 font-black smoke-text text-white">Roteiro</h2>
+                <p class="text-gray-200 font-light text-base md:text-lg smoke-text">Conheça os melhores pontos cannabicos de João Pessoa</p>
             </div>
         </section>
 
         <!-- Seção 5 -->
-        <section class="min-h-screen w-full p-16 kit-section">
+        <section class="min-h-screen w-full p-8 md:p-16 kit-section">
             <div class="kit-content">
-                <h2 class="text-5xl mb-8 font-black smoke-text text-white">Kit GT</h2>
-                <p class="text-gray-200 font-light text-lg smoke-text">Receba um kit exclusivo com produtos selecionados</p>
+                <h2 class="text-4xl md:text-5xl mb-6 md:mb-8 font-black smoke-text text-white">Kit GT</h2>
+                <p class="text-gray-200 font-light text-base md:text-lg smoke-text">Receba um kit exclusivo com produtos selecionados</p>
             </div>
         </section>
 
         <!-- Seção 6 -->
-        <section class="min-h-screen w-full p-16 bg-gray-50">
+        <section class="min-h-screen w-full p-8 md:p-16 bg-gray-50">
             <div>
-                <h2 class="text-5xl mb-8 font-black smoke-text text-gray-800">Reserve Agora</h2>
-                <p class="text-gray-600 font-light text-lg smoke-text">Garanta sua vaga no próximo GanjaTour</p>
+                <h2 class="text-4xl md:text-5xl mb-6 md:mb-8 font-black smoke-text text-gray-800">Reserve Agora</h2>
+                <p class="text-gray-600 font-light text-base md:text-lg smoke-text">Garanta sua vaga no próximo GanjaTour</p>
             </div>
         </section>
     </main>
