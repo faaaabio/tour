@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva - Bento Cards</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html, body {
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .bento-card {
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out forwards;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            height: 100%;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .category-card, .date-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .category-card:hover, .date-card:hover {
+            transform: translateY(-4px);
+            border-color: #22c55e;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-card.selected, .date-card.selected {
+            border-color: #22c55e;
+            background-color: rgba(34, 197, 94, 0.1);
+        }
+
+        .category-card.selected:hover, .date-card.selected:hover {
+            transform: translateY(-4px);
+            border-color: #22c55e;
+            background-color: rgba(34, 197, 94, 0.15);
+        }
+
+        .sticky-content {
+            position: relative;
+            height: auto;
+            overflow-y: visible;
+            padding-bottom: 1rem;
+        }
+
+        .sticky-content::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .sticky-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+
+        .sticky-content::-webkit-scrollbar-thumb {
+            background: #22c55e;
+            border-radius: 3px;
+        }
+
+        .sticky-content::-webkit-scrollbar-thumb:hover {
+            background: #16a34a;
+        }
+
+        .sticky-summary {
+            position: sticky;
+            top: 1rem;
+            height: calc(100vh - 2rem);
+            overflow-y: auto;
+        }
+
+        @media (max-width: 1024px) {
+            .sticky-content {
+                padding-bottom: 220px;
+            }
+
+            .sticky-summary {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                top: auto;
+                height: auto;
+                z-index: 50;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(8px);
+                border-top: 1px solid #e5e7eb;
+                box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1);
+                padding: 1rem;
+            }
+
+            .bento-card {
+                padding: 1rem;
+            }
+
+            .grid-cols-3 {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.75rem;
+            }
+
+            .grid-cols-7 {
+                grid-template-columns: repeat(4, 1fr);
+                gap: 0.5rem;
+            }
+
+            .category-card, .date-card {
+                padding: 0.75rem;
+            }
+
+            .summary-content {
+                max-height: none;
+                overflow-y: visible;
+            }
+
+            .summary-content .space-y-3 {
+                margin-top: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .summary-content .space-y-4 {
+                margin-top: 0.75rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .summary-content .text-sm {
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+            }
+
+            .summary-content .text-lg {
+                font-size: 1rem;
+                line-height: 1.5rem;
+            }
+
+            .summary-content .py-3 {
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .grid-cols-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .grid-cols-7 {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .sticky-summary {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen w-full">
+    <div class="w-full min-h-screen">
+        <div class="w-full px-2 sm:px-4 pt-2 sm:pt-4">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-8">
+                <!-- Coluna da Esquerda -->
+                <div class="lg:col-span-7">
+                    <div class="sticky-content">
+                        <!-- Card Principal -->
+                        <div class="bento-card rounded-xl p-4 sm:p-6 lg:p-8 shadow-lg">
+                            <!-- Seleção de Data -->
+                            <h2 class="text-base font-semibold text-gray-800 mb-3 sm:mb-4">Selecione as Datas</h2>
+                            
+                            <!-- Navegação do Mês -->
+                            <div class="flex items-center justify-between mb-4">
+                                <button id="prevMonth" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-600">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                    </svg>
+                                </button>
+                                <h3 id="currentMonth" class="text-lg font-semibold text-gray-800">Março 2024</h3>
+                                <button id="nextMonth" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-600">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Dias da Semana -->
+                            <div class="grid grid-cols-7 gap-2 sm:gap-4 mb-2">
+                                <div class="text-center text-xs text-gray-500">Dom</div>
+                                <div class="text-center text-xs text-gray-500">Seg</div>
+                                <div class="text-center text-xs text-gray-500">Ter</div>
+                                <div class="text-center text-xs text-gray-500">Qua</div>
+                                <div class="text-center text-xs text-gray-500">Qui</div>
+                                <div class="text-center text-xs text-gray-500">Sex</div>
+                                <div class="text-center text-xs text-gray-500">Sáb</div>
+                            </div>
+
+                            <!-- Grid de Datas -->
+                            <div id="datesGrid" class="grid grid-cols-7 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                                <!-- Os dias serão inseridos aqui via JavaScript -->
+                            </div>
+
+                            <!-- Seleção de Bebidas -->
+                            <h2 class="text-base font-semibold text-gray-800 mb-3 sm:mb-4">Pacotes de Bebidas</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-6">
+                                <div id="duo" class="category-card drink-package bg-white rounded-lg p-3 border border-gray-200">
+                                    <div class="flex flex-col">
+                                        <div>
+                                            <h3 class="text-base font-semibold text-gray-800">Duo</h3>
+                                            <p class="text-xs text-gray-500">2 águas, 2 refris e 2 cervejas</p>
+                                        </div>
+                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 69,90</span>
+                                    </div>
+                                </div>
+                                <div id="trio" class="category-card drink-package bg-white rounded-lg p-3 border border-gray-200">
+                                    <div class="flex flex-col">
+                                        <div>
+                                            <h3 class="text-base font-semibold text-gray-800">Trio</h3>
+                                            <p class="text-xs text-gray-500">3 águas, 3 refris, 3 cervejas e 1 energético</p>
+                                        </div>
+                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 99,90</span>
+                                    </div>
+                                </div>
+                                <div id="quarteto" class="category-card drink-package bg-white rounded-lg p-3 border border-gray-200">
+                                    <div class="flex flex-col">
+                                        <div>
+                                            <h3 class="text-base font-semibold text-gray-800">Quarteto</h3>
+                                            <p class="text-xs text-gray-500">4 águas, 4 refris, 4 cervejas, 2 energéticos e 1 drink</p>
+                                        </div>
+                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 149,90</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comidas Leves -->
+                            <h2 class="text-base font-semibold text-gray-800 mb-3 sm:mb-4">Comidas Leves</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-6">
+                                <div id="snack-basico" class="category-card snack-package bg-white rounded-lg p-3 border border-gray-200">
+                                    <div class="flex flex-col">
+                                        <div>
+                                            <h3 class="text-base font-semibold text-gray-800">Snack Básico</h3>
+                                            <p class="text-xs text-gray-500">2 sanduíches e 2 barras de cereal</p>
+                                        </div>
+                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 49,90</span>
+                                    </div>
+                                </div>
+                                <div id="snack-completo" class="category-card snack-package bg-white rounded-lg p-3 border border-gray-200">
+                                    <div class="flex flex-col">
+                                        <div>
+                                            <h3 class="text-base font-semibold text-gray-800">Snack Completo</h3>
+                                            <p class="text-xs text-gray-500">4 sanduíches, 4 barras e 2 frutas</p>
+                                        </div>
+                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 89,90</span>
+                                    </div>
+                                </div>
+                                <div id="snack-premium" class="category-card snack-package bg-white rounded-lg p-3 border border-gray-200">
+                                    <div class="flex flex-col">
+                                        <div>
+                                            <h3 class="text-base font-semibold text-gray-800">Snack Premium</h3>
+                                            <p class="text-xs text-gray-500">4 sanduíches, 4 barras, 4 frutas e 2 saladas</p>
+                                        </div>
+                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 119,90</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Itens Inclusos -->
+                            <h2 class="text-base font-semibold text-gray-800 mb-3 sm:mb-4">Itens Inclusos</h2>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+                                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-lg">
+                                    <div class="bg-emerald-50 p-1.5 rounded-lg">
+                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Translado</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-lg">
+                                    <div class="bg-emerald-50 p-1.5 rounded-lg">
+                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Motorista</span>
+                                </div>
+                                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-lg">
+                                    <div class="bg-emerald-50 p-1.5 rounded-lg">
+                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm text-gray-700">3 Pontos Turísticos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumo do Pedido -->
+                <div class="lg:col-span-5">
+                    <div class="bento-card rounded-xl p-4 sm:p-6 lg:p-8 shadow-lg sticky-summary">
+                        <h2 class="text-lg font-semibold text-gray-800 mb-3 sm:mb-8">Resumo do Pedido</h2>
+                        <div class="space-y-3 sm:space-y-6 summary-content">
+                            <!-- Controle de Pessoas -->
+                            <div class="flex items-center justify-between py-2">
+                                <div class="text-sm text-gray-600">Quantidade de Pessoas</div>
+                                <div class="flex items-center space-x-3">
+                                    <button id="decreasePeople" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                        </svg>
+                                    </button>
+                                    <span id="peopleCount" class="text-base font-semibold text-gray-800 w-6 text-center">1</span>
+                                    <button id="increasePeople" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Datas Selecionadas -->
+                            <div id="selected-dates" class="space-y-2 sm:space-y-3">
+                                <div class="flex justify-between text-gray-500 cursor-pointer" onclick="toggleSection('dates-content', 'dates-arrow')">
+                                    <span>Datas Selecionadas</span>
+                                    <div class="flex items-center">
+                                        <span id="dates-count">0 dias</span>
+                                        <svg id="dates-arrow" class="w-4 h-4 ml-2 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <div id="dates-content" class="hidden">
+                                    <!-- Conteúdo das datas será inserido aqui via JavaScript -->
+                                </div>
+                            </div>
+
+                            <!-- Bebidas Selecionadas -->
+                            <div id="selected-drinks" class="space-y-2 sm:space-y-3 hidden">
+                                <div class="flex justify-between text-gray-500 cursor-pointer" onclick="toggleSection('drinks-content', 'drinks-arrow')">
+                                    <span>Pacote de Bebidas</span>
+                                    <svg id="drinks-arrow" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <div id="drinks-content" class="hidden">
+                                    <div class="flex justify-between text-gray-500">
+                                        <span id="drink-name"></span>
+                                        <span id="drink-price">R$ 0,00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Comidas Selecionadas -->
+                            <div id="selected-snacks" class="space-y-2 sm:space-y-3 hidden">
+                                <div class="flex justify-between text-gray-500 cursor-pointer" onclick="toggleSection('snacks-content', 'snacks-arrow')">
+                                    <span>Pacote de Comidas</span>
+                                    <svg id="snacks-arrow" class="w-4 h-4 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                    </svg>
+                                </div>
+                                <div id="snacks-content" class="hidden">
+                                    <div class="flex justify-between text-gray-500">
+                                        <span id="snack-name"></span>
+                                        <span id="snack-price">R$ 0,00</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="discount-container" class="hidden">
+                                <div class="flex justify-between text-emerald-600 text-sm">
+                                    <span>Desconto (10%)</span>
+                                    <span id="discount-value">-R$ 0,00</span>
+                                </div>
+                            </div>
+
+                            <div class="border-t border-gray-200 my-3 sm:my-6"></div>
+                            <div class="flex justify-between text-gray-800 font-semibold text-base sm:text-lg">
+                                <span>Total</span>
+                                <span id="total-value">R$ 0,00</span>
+                            </div>
+
+                            <!-- Botão para Formulário -->
+                            <div class="mt-6">
+                                <button onclick="openPaymentPopup()" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 text-center">
+                                    Continuar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup de Pagamento -->
+    <div id="paymentPopup" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-6 max-w-md w-full mx-4">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-lg font-semibold text-gray-800">Pagamento via PIX</h3>
+                <button onclick="closePaymentPopup()" class="text-gray-500 hover:text-gray-700">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- QR Code -->
+            <div class="mb-6 text-center">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000" alt="QR Code PIX" class="mx-auto mb-2">
+                <p class="text-sm text-gray-600">Escaneie o QR Code para pagar</p>
+            </div>
+
+            <!-- Código PIX -->
+            <div class="mb-6">
+                <div class="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                    <span class="text-sm text-gray-600">Código PIX</span>
+                    <button onclick="copyPixCode()" class="text-emerald-600 hover:text-emerald-700">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Campos de Informação -->
+            <div class="space-y-4 mb-6">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Nome</label>
+                    <input type="text" id="name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500">
+                </div>
+            </div>
+
+            <!-- Botão de Envio -->
+            <button onclick="sendToWhatsApp()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300">
+                Enviar para WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <script src="js/reserva.js"></script>
+</body>
+</html>
