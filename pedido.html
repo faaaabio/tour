@@ -281,22 +281,14 @@
                             <!-- Bebidas Selecionadas -->
                             <div id="selected-drinks" class="space-y-2 sm:space-y-3 hidden">
                                 <div class="flex justify-between text-gray-500">
-                                    <span>Pacote de Bebidas</span>
                                     <span id="drink-name"></span>
-                                </div>
-                                <div class="flex justify-between text-gray-500">
-                                    <span>Valor</span>
                                     <span id="drink-price">R$ 0,00</span>
                                 </div>
                             </div>
                             <!-- Comidas Selecionadas -->
                             <div id="selected-snacks" class="space-y-2 sm:space-y-3 hidden">
                                 <div class="flex justify-between text-gray-500">
-                                    <span>Pacote de Comidas</span>
                                     <span id="snack-name"></span>
-                                </div>
-                                <div class="flex justify-between text-gray-500">
-                                    <span>Valor</span>
                                     <span id="snack-price">R$ 0,00</span>
                                 </div>
                             </div>
@@ -370,179 +362,6 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const PRICE_PER_DAY = 299.90;
-            const DISCOUNT_THRESHOLD = 2;
-            const DISCOUNT_PERCENTAGE = 0.10;
-
-            // Preços dos pacotes
-            const DRINK_PACKAGES = {
-                'duo': { price: 69.90, name: 'Duo' },
-                'trio': { price: 99.90, name: 'Trio' },
-                'quarteto': { price: 149.90, name: 'Quarteto' }
-            };
-
-            const SNACK_PACKAGES = {
-                'snack-basico': { price: 49.90, name: 'Snack Básico' },
-                'snack-completo': { price: 89.90, name: 'Snack Completo' },
-                'snack-premium': { price: 119.90, name: 'Snack Premium' }
-            };
-
-            // Recupera os dados do localStorage
-            const selectedDates = JSON.parse(localStorage.getItem('selectedDates') || '[]');
-            const total = localStorage.getItem('total') || 'R$ 0,00';
-            const discount = localStorage.getItem('discount') || 'R$ 0,00';
-            const subtotal = localStorage.getItem('subtotal') || 'R$ 0,00';
-
-            // Atualiza a interface com os dados recuperados
-            const datesContainer = document.getElementById('selected-dates');
-            const datesCount = document.getElementById('dates-count');
-            
-            if (selectedDates.length === 0) {
-                datesCount.textContent = '0 dias';
-            } else {
-                datesCount.textContent = `${selectedDates.length} ${selectedDates.length === 1 ? 'dia' : 'dias'}`;
-            }
-
-            // Atualiza o total e desconto
-            document.getElementById('total-value').textContent = total;
-            if (discount !== 'R$ 0,00') {
-                document.getElementById('discount-container').classList.remove('hidden');
-                document.getElementById('discount-value').textContent = `-${discount}`;
-            }
-
-            function formatCurrency(value) {
-                return `R$ ${value.toFixed(2)}`;
-            }
-
-            function updateSummary() {
-                const datesTotal = selectedDates.length * PRICE_PER_DAY;
-                const selectedDrink = document.querySelector('.drink-package.selected');
-                const selectedSnack = document.querySelector('.snack-package.selected');
-                
-                let drinkTotal = 0;
-                let snackTotal = 0;
-
-                // Atualiza seção de bebidas
-                const drinksSection = document.getElementById('selected-drinks');
-                const drinkName = document.getElementById('drink-name');
-                const drinkPrice = document.getElementById('drink-price');
-
-                if (selectedDrink) {
-                    const drinkId = selectedDrink.id;
-                    drinkTotal = DRINK_PACKAGES[drinkId].price;
-                    drinksSection.classList.remove('hidden');
-                    drinkName.textContent = DRINK_PACKAGES[drinkId].name;
-                    drinkPrice.textContent = formatCurrency(drinkTotal);
-                } else {
-                    drinksSection.classList.add('hidden');
-                }
-
-                // Atualiza seção de comidas
-                const snacksSection = document.getElementById('selected-snacks');
-                const snackName = document.getElementById('snack-name');
-                const snackPrice = document.getElementById('snack-price');
-
-                if (selectedSnack) {
-                    const snackId = selectedSnack.id;
-                    snackTotal = SNACK_PACKAGES[snackId].price;
-                    snacksSection.classList.remove('hidden');
-                    snackName.textContent = SNACK_PACKAGES[snackId].name;
-                    snackPrice.textContent = formatCurrency(snackTotal);
-                } else {
-                    snacksSection.classList.add('hidden');
-                }
-
-                const subtotal = datesTotal + drinkTotal + snackTotal;
-                let discount = 0;
-                
-                if (selectedDates.length > DISCOUNT_THRESHOLD) {
-                    discount = datesTotal * DISCOUNT_PERCENTAGE;
-                    document.getElementById('discount-container').classList.remove('hidden');
-                    document.getElementById('discount-value').textContent = `-${formatCurrency(discount)}`;
-                } else {
-                    document.getElementById('discount-container').classList.add('hidden');
-                }
-
-                const total = subtotal - discount;
-                document.getElementById('total-value').textContent = formatCurrency(total);
-
-                // Atualiza o localStorage
-                localStorage.setItem('total', formatCurrency(total));
-                localStorage.setItem('subtotal', formatCurrency(subtotal));
-                localStorage.setItem('discount', formatCurrency(discount));
-                localStorage.setItem('selectedDrink', selectedDrink ? DRINK_PACKAGES[selectedDrink.id].name : '');
-                localStorage.setItem('selectedSnack', selectedSnack ? SNACK_PACKAGES[selectedSnack.id].name : '');
-                localStorage.setItem('drinkPrice', selectedDrink ? formatCurrency(DRINK_PACKAGES[selectedDrink.id].price) : 'R$ 0,00');
-                localStorage.setItem('snackPrice', selectedSnack ? formatCurrency(SNACK_PACKAGES[selectedSnack.id].price) : 'R$ 0,00');
-            }
-
-            // Adicionar interatividade aos pacotes de bebidas
-            document.querySelectorAll('.drink-package').forEach(card => {
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('.drink-package').forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-                    updateSummary();
-                });
-            });
-
-            // Adicionar interatividade aos pacotes de snacks
-            document.querySelectorAll('.snack-package').forEach(card => {
-                card.addEventListener('click', () => {
-                    document.querySelectorAll('.snack-package').forEach(c => c.classList.remove('selected'));
-                    card.classList.add('selected');
-                    updateSummary();
-                });
-            });
-        });
-
-        function openPaymentPopup() {
-            document.getElementById('paymentPopup').classList.remove('hidden');
-            document.getElementById('paymentPopup').classList.add('flex');
-        }
-
-        function closePaymentPopup() {
-            document.getElementById('paymentPopup').classList.add('hidden');
-            document.getElementById('paymentPopup').classList.remove('flex');
-        }
-
-        function copyPixCode() {
-            const pixCode = "00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000";
-            navigator.clipboard.writeText(pixCode).then(() => {
-                alert('Código PIX copiado!');
-            });
-        }
-
-        function sendToWhatsApp() {
-            const name = document.getElementById('name').value;
-            
-            if (!name) {
-                alert('Por favor, informe seu nome');
-                return;
-            }
-
-            const selectedDates = JSON.parse(localStorage.getItem('selectedDates') || '[]');
-            const selectedDrink = localStorage.getItem('selectedDrink') || 'Nenhum';
-            const selectedSnack = localStorage.getItem('selectedSnack') || 'Nenhum';
-            const total = localStorage.getItem('total') || 'R$ 0,00';
-
-            // Formata as datas para exibição
-            const formattedDates = selectedDates.map(date => {
-                const [year, month, day] = date.split('-');
-                return `${day}/${month}/${year}`;
-            }).join('\n');
-
-            const message = `*Novo Pedido*\n\n` +
-                `*Nome:* ${name}\n\n` +
-                `*Datas Selecionadas:*\n${formattedDates}\n\n` +
-                `*Pacote de Bebidas:* ${selectedDrink}\n` +
-                `*Pacote de Comidas:* ${selectedSnack}\n` +
-                `*Total:* ${total}`;
-
-            const encodedMessage = encodeURIComponent(message);
-            window.open(`https://wa.me/5511977777030?text=${encodedMessage}`, '_blank');
-        }
-    </script>
+    <script src="js/pedido.js"></script>
 </body>
 </html> 
