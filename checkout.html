@@ -46,34 +46,6 @@
             background-color: rgba(34, 197, 94, 0.1);
         }
 
-        .sticky-summary {
-            position: sticky;
-            top: 1rem;
-            height: calc(100vh - 2rem);
-        }
-
-        .category-card {
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .category-card:hover {
-            transform: translateY(-4px);
-            border-color: #22c55e;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .category-card.selected {
-            border-color: #22c55e;
-            background-color: rgba(34, 197, 94, 0.1);
-        }
-
-        .category-card.selected:hover {
-            transform: translateY(-4px);
-            border-color: #22c55e;
-            background-color: rgba(34, 197, 94, 0.15);
-        }
-
         .sticky-content {
             position: sticky;
             top: 1rem;
@@ -99,12 +71,18 @@
             background: #16a34a;
         }
 
+        .sticky-summary {
+            position: sticky;
+            top: 1rem;
+            height: calc(100vh - 2rem);
+        }
+
         @media (max-width: 768px) {
             .sticky-content {
                 position: relative;
                 height: auto;
                 top: 0;
-                padding-bottom: 220px; /* Reduzido para acomodar o resumo sem scroll */
+                padding-bottom: 220px;
             }
 
             .sticky-summary {
@@ -130,26 +108,15 @@
                 gap: 0.5rem;
             }
 
-            .grid-cols-3 {
-                grid-template-columns: 1fr;
-                gap: 0.75rem;
-            }
-
             .date-card {
                 padding: 0.5rem;
             }
 
-            .category-card {
-                padding: 0.75rem;
-            }
-
-            /* Removido o scroll do resumo */
             .summary-content {
                 max-height: none;
                 overflow-y: visible;
             }
 
-            /* Ajustes para tornar o resumo mais compacto */
             .summary-content .space-y-3 {
                 margin-top: 0.5rem;
                 margin-bottom: 0.5rem;
@@ -199,151 +166,36 @@
 
                             <!-- Seleção de Data -->
                             <h2 class="text-base font-semibold text-gray-800 mb-3 sm:mb-4">Selecione as Datas</h2>
-                            <div class="grid grid-cols-7 gap-2 sm:gap-4 mb-4 sm:mb-6">
-                                <div class="date-card bg-white rounded-lg p-3 text-center border border-gray-200" data-date="2024-03-15">
-                                    <div class="text-xs text-gray-500">Hoje</div>
-                                    <div class="text-base font-semibold text-gray-800 mt-1">15</div>
-                                    <div class="text-xs text-gray-500">Mar</div>
-                                </div>
-                                <div class="date-card bg-white rounded-lg p-3 text-center border border-gray-200" data-date="2024-03-16">
-                                    <div class="text-xs text-gray-500">Sáb</div>
-                                    <div class="text-base font-semibold text-gray-800 mt-1">16</div>
-                                    <div class="text-xs text-gray-500">Mar</div>
-                                </div>
-                                <div class="date-card bg-white rounded-lg p-3 text-center border border-gray-200" data-date="2024-03-17">
-                                    <div class="text-xs text-gray-500">Dom</div>
-                                    <div class="text-base font-semibold text-gray-800 mt-1">17</div>
-                                    <div class="text-xs text-gray-500">Mar</div>
-                                </div>
-                                <div class="date-card bg-white rounded-lg p-3 text-center border border-gray-200" data-date="2024-03-18">
-                                    <div class="text-xs text-gray-500">Seg</div>
-                                    <div class="text-base font-semibold text-gray-800 mt-1">18</div>
-                                    <div class="text-xs text-gray-500">Mar</div>
-                                </div>
-                                <div class="date-card bg-white rounded-lg p-3 text-center border border-gray-200" data-date="2024-03-19">
-                                    <div class="text-xs text-gray-500">Ter</div>
-                                    <div class="text-base font-semibold text-gray-800 mt-1">19</div>
-                                    <div class="text-xs text-gray-500">Mar</div>
-                                </div>
-                                <div class="date-card bg-white rounded-lg p-3 text-center border border-gray-200" data-date="2024-03-20">
-                                    <div class="text-xs text-gray-500">Qua</div>
-                                    <div class="text-base font-semibold text-gray-800 mt-1">20</div>
-                                    <div class="text-xs text-gray-500">Mar</div>
-                                </div>
-                                <div class="date-card bg-white rounded-lg p-3 text-center border border-gray-200" data-date="2024-03-21">
-                                    <div class="text-xs text-gray-500">Qui</div>
-                                    <div class="text-base font-semibold text-gray-800 mt-1">21</div>
-                                    <div class="text-xs text-gray-500">Mar</div>
-                                </div>
+                            
+                            <!-- Navegação do Mês -->
+                            <div class="flex items-center justify-between mb-4">
+                                <button id="prevMonth" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-600">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                                    </svg>
+                                </button>
+                                <h3 id="currentMonth" class="text-lg font-semibold text-gray-800">Março 2024</h3>
+                                <button id="nextMonth" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-gray-600">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                    </svg>
+                                </button>
                             </div>
 
-                            <!-- Seleção de Bebidas -->
-                            <h2 class="text-base font-semibold text-gray-800 mb-3 sm:mb-4">Pacotes de Bebidas</h2>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-6">
-                                <div id="duo" class="category-card drink-package bg-white rounded-lg p-3 border border-gray-200">
-                                    <div class="flex flex-col">
-                                        <div>
-                                            <h3 class="text-base font-semibold text-gray-800">Duo</h3>
-                                            <p class="text-xs text-gray-500">2 pessoas: 4 cervejas + 2 refris</p>
-                                        </div>
-                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 69,90</span>
-                                    </div>
-                                </div>
-                                <div id="trio" class="category-card drink-package bg-white rounded-lg p-3 border border-gray-200">
-                                    <div class="flex flex-col">
-                                        <div>
-                                            <h3 class="text-base font-semibold text-gray-800">Trio</h3>
-                                            <p class="text-xs text-gray-500">3 pessoas: 6 cervejas + 3 refris + 1 energético</p>
-                                        </div>
-                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 99,90</span>
-                                    </div>
-                                </div>
-                                <div id="quarteto" class="category-card drink-package bg-white rounded-lg p-3 border border-gray-200">
-                                    <div class="flex flex-col">
-                                        <div>
-                                            <h3 class="text-base font-semibold text-gray-800">Quarteto</h3>
-                                            <p class="text-xs text-gray-500">4 pessoas: 8 cervejas + 4 refris + 2 energéticos + 1 drink</p>
-                                        </div>
-                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 149,90</span>
-                                    </div>
-                                </div>
+                            <!-- Dias da Semana -->
+                            <div class="grid grid-cols-7 gap-2 sm:gap-4 mb-2">
+                                <div class="text-center text-xs text-gray-500">Dom</div>
+                                <div class="text-center text-xs text-gray-500">Seg</div>
+                                <div class="text-center text-xs text-gray-500">Ter</div>
+                                <div class="text-center text-xs text-gray-500">Qua</div>
+                                <div class="text-center text-xs text-gray-500">Qui</div>
+                                <div class="text-center text-xs text-gray-500">Sex</div>
+                                <div class="text-center text-xs text-gray-500">Sáb</div>
                             </div>
 
-                            <!-- Comidas Leves -->
-                            <h2 class="text-base font-semibold text-gray-800 mb-3 sm:mb-4">Comidas Leves</h2>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-4 sm:mb-6">
-                                <div id="snack-basico" class="category-card snack-package bg-white rounded-lg p-3 border border-gray-200">
-                                    <div class="flex flex-col">
-                                        <div>
-                                            <h3 class="text-base font-semibold text-gray-800">Snack Básico</h3>
-                                            <p class="text-xs text-gray-500">2 pessoas: 2 sanduíches + 2 frutas + 2 barras de cereal</p>
-                                        </div>
-                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 49,90</span>
-                                    </div>
-                                </div>
-                                <div id="snack-completo" class="category-card snack-package bg-white rounded-lg p-3 border border-gray-200">
-                                    <div class="flex flex-col">
-                                        <div>
-                                            <h3 class="text-base font-semibold text-gray-800">Snack Completo</h3>
-                                            <p class="text-xs text-gray-500">4 pessoas: 4 sanduíches + 4 frutas + 4 barras + 2 saladas</p>
-                                        </div>
-                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 89,90</span>
-                                    </div>
-                                </div>
-                                <div id="snack-premium" class="category-card snack-package bg-white rounded-lg p-3 border border-gray-200">
-                                    <div class="flex flex-col">
-                                        <div>
-                                            <h3 class="text-base font-semibold text-gray-800">Snack Premium</h3>
-                                            <p class="text-xs text-gray-500">4 pessoas: 4 sanduíches + 4 frutas + 4 barras + 2 saladas + 2 sobremesas</p>
-                                        </div>
-                                        <span class="text-emerald-600 font-semibold text-sm mt-2">R$ 119,90</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Itens Inclusos -->
-                            <h2 class="text-base font-semibold text-gray-800 mb-3 sm:mb-4">Itens Inclusos</h2>
-                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-                                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-lg">
-                                    <div class="bg-emerald-50 p-1.5 rounded-lg">
-                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-700">Translado</span>
-                                </div>
-                                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-lg">
-                                    <div class="bg-emerald-50 p-1.5 rounded-lg">
-                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-700">Motorista Particular</span>
-                                </div>
-                                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-lg">
-                                    <div class="bg-emerald-50 p-1.5 rounded-lg">
-                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-700">3 Pontos Turísticos</span>
-                                </div>
-                                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-lg">
-                                    <div class="bg-emerald-50 p-1.5 rounded-lg">
-                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-700">Cooler</span>
-                                </div>
-                                <div class="flex items-center space-x-3 bg-gray-50 px-4 py-2 rounded-lg">
-                                    <div class="bg-emerald-50 p-1.5 rounded-lg">
-                                        <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                        </svg>
-                                    </div>
-                                    <span class="text-sm text-gray-700">Kit Ganja Tour</span>
-                                </div>
+                            <!-- Grid de Datas -->
+                            <div id="datesGrid" class="grid grid-cols-7 gap-2 sm:gap-4 mb-4 sm:mb-6">
+                                <!-- Os dias serão inseridos aqui via JavaScript -->
                             </div>
                         </div>
                     </div>
@@ -354,6 +206,24 @@
                     <div class="bento-card rounded-xl p-4 sm:p-8 shadow-lg sticky-summary">
                         <h2 class="text-lg font-semibold text-gray-800 mb-3 sm:mb-8">Resumo do Pedido</h2>
                         <div class="space-y-3 sm:space-y-6 summary-content">
+                            <!-- Controle de Pessoas -->
+                            <div class="flex items-center justify-between py-2">
+                                <div class="text-sm text-gray-600">Quantidade de Pessoas</div>
+                                <div class="flex items-center space-x-3">
+                                    <button id="decreasePeople" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 12h-15" />
+                                        </svg>
+                                    </button>
+                                    <span id="peopleCount" class="text-base font-semibold text-gray-800 w-6 text-center">1</span>
+                                    <button id="increasePeople" class="w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 text-gray-600 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
                             <div id="selected-dates" class="space-y-2 sm:space-y-3">
                                 <div class="text-sm text-gray-500">Nenhuma data selecionada</div>
                             </div>
@@ -368,9 +238,27 @@
                                 <span>Total</span>
                                 <span id="total-value">R$ 0,00</span>
                             </div>
-                            <button id="reserveButton" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 sm:py-4 px-6 rounded-lg transition-colors duration-300 shadow-sm">
-                                Reservar Agora
-                            </button>
+
+                            <!-- Botão para Formulário -->
+                            <div class="mt-6">
+                                <a href="pedido.html" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-300 text-center">
+                                    Continuar
+                                </a>
+                                <div class="text-gray-500 mt-6 space-y-4">
+                                    <div class="flex items-start gap-2">
+                                        <div class="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-medium">1</div>
+                                        <p>Selecione as datas desejadas</p>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <div class="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-medium">2</div>
+                                        <p>Preencha seus dados para finalizar o pedido</p>
+                                    </div>
+                                    <div class="flex items-start gap-2">
+                                        <div class="flex-shrink-0 w-5 h-5 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 font-medium">3</div>
+                                        <p>Pague via PIX e confirme sua reserva</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -378,204 +266,199 @@
         </div>
     </div>
 
-    <!-- Popup de Pagamento -->
-    <div id="paymentPopup" class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center z-50">
-        <div class="bg-white w-full sm:w-auto sm:max-w-2xl rounded-2xl p-6 transform transition-transform duration-300 scale-95">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-semibold text-gray-800">Pagamento via PIX</h3>
-                <button id="closePopup" class="text-gray-500 hover:text-gray-700">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-            <div class="text-center">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000" alt="QR Code PIX" class="mx-auto mb-4 w-48 h-48 sm:w-64 sm:h-64">
-                <p class="text-sm text-gray-600 mb-2">Ou copie o código PIX abaixo:</p>
-                <div class="bg-gray-100 p-3 rounded-lg mb-4">
-                    <p id="pixCode" class="text-sm font-mono break-all">00020126580014BR.GOV.BCB.PIX0136123e4567-e89b-12d3-a456-426614174000</p>
-                </div>
-                <button id="copyPixCode" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-300">
-                    Copiar Código PIX
-                </button>
-            </div>
-        </div>
-    </div>
-
     <script>
-        const PRICE_PER_DAY = 299.90;
-        const DISCOUNT_THRESHOLD = 2;
-        const DISCOUNT_PERCENTAGE = 0.10;
+        document.addEventListener('DOMContentLoaded', function() {
+            const PRICE_PER_DAY = 299.90;
+            const DISCOUNT_THRESHOLD = 2;
+            const DISCOUNT_PERCENTAGE = 0.10;
+            const MAX_PEOPLE = 4;
+            let peopleCount = 1;
 
-        // Preços dos pacotes
-        const DRINK_PACKAGES = {
-            'duo': { price: 69.90, name: 'Duo' },
-            'trio': { price: 99.90, name: 'Trio' },
-            'quarteto': { price: 149.90, name: 'Quarteto' }
-        };
+            // Controle de quantidade de pessoas
+            const decreaseButton = document.getElementById('decreasePeople');
+            const increaseButton = document.getElementById('increasePeople');
+            const peopleCountElement = document.getElementById('peopleCount');
 
-        const SNACK_PACKAGES = {
-            'snack-basico': { price: 49.90, name: 'Snack Básico' },
-            'snack-completo': { price: 89.90, name: 'Snack Completo' },
-            'snack-premium': { price: 119.90, name: 'Snack Premium' }
-        };
+            function updatePeopleButtons() {
+                decreaseButton.disabled = peopleCount <= 1;
+                increaseButton.disabled = peopleCount >= MAX_PEOPLE;
+            }
 
-        // Funções do popup de pagamento
-        const paymentPopup = document.getElementById('paymentPopup');
-        const closePopup = document.getElementById('closePopup');
-        const reserveButton = document.getElementById('reserveButton');
-        const copyPixCode = document.getElementById('copyPixCode');
-        const pixCode = document.getElementById('pixCode');
-        const popupContent = paymentPopup.querySelector('.bg-white');
-
-        reserveButton.addEventListener('click', () => {
-            paymentPopup.classList.remove('hidden');
-            paymentPopup.classList.add('flex');
-            setTimeout(() => {
-                popupContent.classList.remove('scale-95');
-            }, 10);
-        });
-
-        closePopup.addEventListener('click', () => {
-            popupContent.classList.add('scale-95');
-            setTimeout(() => {
-                paymentPopup.classList.add('hidden');
-                paymentPopup.classList.remove('flex');
-            }, 300);
-        });
-
-        copyPixCode.addEventListener('click', () => {
-            navigator.clipboard.writeText(pixCode.textContent).then(() => {
-                copyPixCode.textContent = 'Código Copiado!';
-                setTimeout(() => {
-                    copyPixCode.textContent = 'Copiar Código PIX';
-                }, 2000);
+            decreaseButton.addEventListener('click', () => {
+                if (peopleCount > 1) {
+                    peopleCount--;
+                    peopleCountElement.textContent = peopleCount;
+                    updatePeopleButtons();
+                    updateSummary();
+                }
             });
-        });
 
-        // Fechar popup ao clicar fora
-        paymentPopup.addEventListener('click', (e) => {
-            if (e.target === paymentPopup) {
-                closePopup.click();
-            }
-        });
-
-        function formatDate(dateStr) {
-            const date = new Date(dateStr);
-            const day = date.getDate();
-            const month = date.toLocaleString('pt-BR', { month: 'short' });
-            const weekday = date.toLocaleString('pt-BR', { weekday: 'short' });
-            return `${weekday}, ${day} ${month}`;
-        }
-
-        function formatCurrency(value) {
-            return `R$ ${value.toFixed(2)}`;
-        }
-
-        function updateSummary() {
-            const selectedDates = document.querySelectorAll('.date-card.selected');
-            const selectedDays = selectedDates.length;
-            const subtotal = selectedDays * PRICE_PER_DAY;
-            
-            // Atualiza a lista de datas selecionadas
-            const datesContainer = document.getElementById('selected-dates');
-            if (selectedDays === 0) {
-                datesContainer.innerHTML = '<div class="text-sm text-gray-500">Nenhuma data selecionada</div>';
-            } else {
-                datesContainer.innerHTML = Array.from(selectedDates)
-                    .map(card => {
-                        const date = card.getAttribute('data-date');
-                        return `<div class="flex justify-between text-gray-500">
-                            <span>${formatDate(date)}</span>
-                            <span>${formatCurrency(PRICE_PER_DAY)}</span>
-                        </div>`;
-                    })
-                    .join('');
-            }
-
-            // Calcula desconto se aplicável
-            let discount = 0;
-            if (selectedDays > DISCOUNT_THRESHOLD) {
-                discount = subtotal * DISCOUNT_PERCENTAGE;
-                document.getElementById('discount-container').classList.remove('hidden');
-                document.getElementById('discount-value').textContent = `-${formatCurrency(discount)}`;
-            } else {
-                document.getElementById('discount-container').classList.add('hidden');
-            }
-
-            // Adiciona pacote de bebidas selecionado
-            const selectedDrink = document.querySelector('.drink-package.selected');
-            let drinkPrice = 0;
-            if (selectedDrink) {
-                const drinkId = selectedDrink.id;
-                drinkPrice = DRINK_PACKAGES[drinkId].price;
-                datesContainer.innerHTML += `
-                    <div class="flex justify-between text-gray-500 mt-2">
-                        <span>${DRINK_PACKAGES[drinkId].name}</span>
-                        <span>${formatCurrency(drinkPrice)}</span>
-                    </div>`;
-            }
-
-            // Adiciona pacote de snacks selecionado
-            const selectedSnack = document.querySelector('.snack-package.selected');
-            let snackPrice = 0;
-            if (selectedSnack) {
-                const snackId = selectedSnack.id;
-                snackPrice = SNACK_PACKAGES[snackId].price;
-                datesContainer.innerHTML += `
-                    <div class="flex justify-between text-gray-500 mt-2">
-                        <span>${SNACK_PACKAGES[snackId].name}</span>
-                        <span>${formatCurrency(snackPrice)}</span>
-                    </div>`;
-            }
-
-            // Atualiza o total
-            const total = subtotal - discount + drinkPrice + snackPrice;
-            document.getElementById('total-value').textContent = formatCurrency(total);
-
-            // Atualiza o botão de finalizar compra
-            const finishButton = document.querySelector('button');
-            if (selectedDays === 0) {
-                finishButton.disabled = true;
-                finishButton.classList.add('opacity-50', 'cursor-not-allowed');
-            } else {
-                finishButton.disabled = false;
-                finishButton.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-        }
-
-        // Adicionar interatividade aos cards de data
-        document.querySelectorAll('.date-card').forEach(card => {
-            card.addEventListener('click', () => {
-                card.classList.toggle('selected');
-                updateSummary();
+            increaseButton.addEventListener('click', () => {
+                if (peopleCount < MAX_PEOPLE) {
+                    peopleCount++;
+                    peopleCountElement.textContent = peopleCount;
+                    updatePeopleButtons();
+                    updateSummary();
+                }
             });
-        });
 
-        // Adicionar interatividade aos pacotes de bebidas
-        document.querySelectorAll('.drink-package').forEach(card => {
-            card.addEventListener('click', () => {
-                // Remove seleção anterior
-                document.querySelectorAll('.drink-package').forEach(c => c.classList.remove('selected'));
-                // Adiciona nova seleção
-                card.classList.add('selected');
-                updateSummary();
+            // Inicializa os botões
+            updatePeopleButtons();
+
+            let currentDate = new Date();
+            let currentMonth = currentDate.getMonth();
+            let currentYear = currentDate.getFullYear();
+
+            function formatDate(dateStr) {
+                const date = new Date(dateStr);
+                const day = date.getDate();
+                const month = date.toLocaleString('pt-BR', { month: 'short' });
+                const weekday = date.toLocaleString('pt-BR', { weekday: 'short' });
+                return `${weekday}, ${day} ${month}`;
+            }
+
+            function formatCurrency(value) {
+                return `R$ ${value.toFixed(2)}`;
+            }
+
+            function updateMonthDisplay() {
+                const monthNames = [
+                    'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+                ];
+                document.getElementById('currentMonth').textContent = 
+                    `${monthNames[currentMonth]} ${currentYear}`;
+            }
+
+            function generateDaysGrid() {
+                const firstDay = new Date(currentYear, currentMonth, 1);
+                const lastDay = new Date(currentYear, currentMonth + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startingDay = firstDay.getDay();
+
+                const datesGrid = document.getElementById('datesGrid');
+                datesGrid.innerHTML = '';
+
+                // Adiciona espaços vazios para os dias antes do primeiro dia do mês
+                for (let i = 0; i < startingDay; i++) {
+                    datesGrid.appendChild(createEmptyDayCell());
+                }
+
+                // Adiciona os dias do mês
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const date = new Date(currentYear, currentMonth, day);
+                    const isToday = isSameDay(date, new Date());
+                    const isPast = date < new Date(new Date().setHours(0, 0, 0, 0));
+                    
+                    datesGrid.appendChild(createDayCell(date, isToday, isPast));
+                }
+            }
+
+            function createEmptyDayCell() {
+                const cell = document.createElement('div');
+                cell.className = 'h-16 sm:h-20';
+                return cell;
+            }
+
+            function createDayCell(date, isToday, isPast) {
+                const cell = document.createElement('div');
+                const day = date.getDate();
+
+                cell.className = `date-card rounded-lg p-2 text-center border border-gray-200 h-12 sm:h-14 flex flex-col justify-center items-center ${isPast ? 'opacity-50 cursor-not-allowed' : ''} ${isToday ? 'bg-gray-200' : 'bg-white'}`;
+                cell.setAttribute('data-date', date.toISOString().split('T')[0]);
+
+                if (!isPast) {
+                    cell.addEventListener('click', () => {
+                        cell.classList.toggle('selected');
+                        updateSummary();
+                    });
+                }
+
+                cell.innerHTML = `
+                    <div class="flex-1 flex items-center justify-center">
+                        <div class="text-sm font-semibold text-gray-800">${day}</div>
+                    </div>
+                `;
+
+                return cell;
+            }
+
+            function isSameDay(date1, date2) {
+                return date1.getDate() === date2.getDate() &&
+                    date1.getMonth() === date2.getMonth() &&
+                    date1.getFullYear() === date2.getFullYear();
+            }
+
+            function updateSummary() {
+                const selectedDates = document.querySelectorAll('.date-card.selected');
+                const selectedDays = selectedDates.length;
+                const subtotal = selectedDays * PRICE_PER_DAY * peopleCount;
+                
+                // Atualiza a lista de datas selecionadas
+                const datesContainer = document.getElementById('selected-dates');
+                if (selectedDays === 0) {
+                    datesContainer.innerHTML = '<div class="text-sm text-gray-500">Nenhuma data selecionada</div>';
+                } else {
+                    datesContainer.innerHTML = Array.from(selectedDates)
+                        .map(card => {
+                            const date = card.getAttribute('data-date');
+                            return `<div class="flex justify-between text-gray-500">
+                                <span>${formatDate(date)}</span>
+                                <span>${formatCurrency(PRICE_PER_DAY * peopleCount)}</span>
+                            </div>`;
+                        })
+                        .join('');
+                }
+
+                // Calcula desconto se aplicável
+                let discount = 0;
+                if (selectedDays > DISCOUNT_THRESHOLD) {
+                    discount = subtotal * DISCOUNT_PERCENTAGE;
+                    document.getElementById('discount-container').classList.remove('hidden');
+                    document.getElementById('discount-value').textContent = `-${formatCurrency(discount)}`;
+                } else {
+                    document.getElementById('discount-container').classList.add('hidden');
+                }
+
+                // Atualiza o total
+                const total = subtotal - discount;
+                document.getElementById('total-value').textContent = formatCurrency(total);
+
+                // Salva os dados no localStorage
+                const dates = Array.from(selectedDates).map(card => formatDate(card.getAttribute('data-date')));
+                localStorage.setItem('selectedDates', JSON.stringify(dates));
+                localStorage.setItem('total', formatCurrency(total));
+                localStorage.setItem('subtotal', formatCurrency(subtotal));
+                localStorage.setItem('discount', formatCurrency(discount));
+                localStorage.setItem('peopleCount', peopleCount);
+            }
+
+            // Event listeners para navegação entre meses
+            document.getElementById('prevMonth').addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                updateMonthDisplay();
+                generateDaysGrid();
             });
-        });
 
-        // Adicionar interatividade aos pacotes de snacks
-        document.querySelectorAll('.snack-package').forEach(card => {
-            card.addEventListener('click', () => {
-                // Remove seleção anterior
-                document.querySelectorAll('.snack-package').forEach(c => c.classList.remove('selected'));
-                // Adiciona nova seleção
-                card.classList.add('selected');
-                updateSummary();
+            document.getElementById('nextMonth').addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                updateMonthDisplay();
+                generateDaysGrid();
             });
-        });
 
-        // Inicializa o resumo
-        updateSummary();
+            // Inicialização
+            updateMonthDisplay();
+            generateDaysGrid();
+            updateSummary();
+        });
     </script>
 </body>
 </html> 
